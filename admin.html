@@ -6,10 +6,8 @@
 <title>Admin Panel - Crave Me by Ashakky</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -167,7 +165,7 @@ body { font-family: 'Montserrat', sans-serif; background: var(--black); color: v
       </div>
       <div class="form-group">
         <label class="form-label">Description</label>
-        <input type="text" class="form-input" id="productDesc" required>
+        <input type="text" class="form-input" id="productDescription" required>
       </div>
       <div class="form-group">
         <label class="form-label">Image URL</label>
@@ -183,24 +181,18 @@ body { font-family: 'Montserrat', sans-serif; background: var(--black); color: v
 </div>
 
 <script>
-// 🔥 FIREBASE CONFIG
-const firebaseConfig = {
-  apiKey: "AIzaSyAnjyraktg2EeXnZQFznHhoZ_kb_LJ0WEc",
-  authDomain: "cravemebyashkky.firebaseapp.com",
-  projectId: "cravemebyashkky",
-  storageBucket: "cravemebyashkky.firebasestorage.app",
-  messagingSenderId: "558597438204",
-  appId: "1:558597438204:web:423c80c349ae35547ab579"
-};
+// 🔥 SUPABASE CONFIG
+const SUPABASE_URL = 'https://siguwlaudsssmcjxwong.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_OWShfzcHQhYWW7cHxE0h2Q_hzZ9jLz9';
 
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-const auth = firebase.auth();
+// Initialize Supabase
+const { createClient } = supabase;
+const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 let editingProductId = null;
 let allProducts = [];
 
-// Simple auth (in production, use proper Firebase Auth)
+// Simple auth (in production, use proper authentication)
 function login() {
   const email = document.getElementById('loginEmail').value;
   const password = document.getElementById('loginPassword').value;
@@ -224,8 +216,14 @@ function logout() {
 // Load products
 async function loadProducts() {
   try {
-    const snapshot = await db.collection('products').orderBy('id').get();
-    allProducts = snapshot.docs.map(doc => ({docId: doc.id, ...doc.data()}));
+    const { data, error } = await supabaseClient
+      .from('products')
+      .select('*')
+      .order('id', { ascending: true });
+    
+    if (error) throw error;
+    
+    allProducts = data || [];
     renderProducts();
     updateStats();
   } catch (error) {
@@ -250,8 +248,8 @@ function renderProducts() {
       <div class="product-category">${p.category}</div>
       <div class="product-price">${p.price}</div>
       <div class="table-actions">
-        <button class="btn-edit" onclick="editProduct('${p.docId}')">Edit</button>
-        <button class="btn-delete" onclick="deleteProduct('${p.docId}', '${p.name}')">Delete</button>
+        <button class="btn-edit" onclick="editProduct(${p.id})">Edit</button>
+        <button class="btn-delete" onclick="deleteProduct(${p.id}, '${p.name.replace(/'/g, "\\'")}')">Delete</button>
       </div>
     </div>
   `).join('');
@@ -269,17 +267,17 @@ function openAddModal() {
   document.getElementById('productModal').classList.add('active');
 }
 
-function editProduct(docId) {
-  const product = allProducts.find(p => p.docId === docId);
+function editProduct(productId) {
+  const product = allProducts.find(p => p.id === productId);
   if (!product) return;
   
-  editingProductId = docId;
+  editingProductId = productId;
   document.getElementById('modalTitle').textContent = 'Edit Product';
   document.getElementById('productId').value = product.id;
   document.getElementById('productName').value = product.name;
   document.getElementById('productCategory').value = product.category;
   document.getElementById('productPrice').value = product.price;
-  document.getElementById('productDesc').value = product.desc;
+  document.getElementById('productDescription').value = product.description;
   document.getElementById('productImg').value = product.img;
   document.getElementById('productSizes').value = (product.sizes || ['S','M','L','XL']).join(', ');
   document.getElementById('productModal').classList.add('active');
@@ -300,17 +298,28 @@ document.getElementById('productForm').addEventListener('submit', async (e) => {
     name: document.getElementById('productName').value,
     category: document.getElementById('productCategory').value,
     price: document.getElementById('productPrice').value,
-    desc: document.getElementById('productDesc').value,
+    description: document.getElementById('productDescription').value,
     img: document.getElementById('productImg').value,
     sizes: document.getElementById('productSizes').value.split(',').map(s => s.trim())
   };
   
   try {
     if (editingProductId) {
-      await db.collection('products').doc(editingProductId).update(productData);
+      // Update existing product
+      const { error } = await supabaseClient
+        .from('products')
+        .update(productData)
+        .eq('id', editingProductId);
+      
+      if (error) throw error;
       alert('Product updated successfully!');
     } else {
-      await db.collection('products').add(productData);
+      // Add new product
+      const { error } = await supabaseClient
+        .from('products')
+        .insert([productData]);
+      
+      if (error) throw error;
       alert('Product added successfully!');
     }
     closeModal();
@@ -322,11 +331,16 @@ document.getElementById('productForm').addEventListener('submit', async (e) => {
 });
 
 // Delete product
-async function deleteProduct(docId, name) {
+async function deleteProduct(productId, name) {
   if (!confirm(`Are you sure you want to delete "${name}"?`)) return;
   
   try {
-    await db.collection('products').doc(docId).delete();
+    const { error } = await supabaseClient
+      .from('products')
+      .delete()
+      .eq('id', productId);
+    
+    if (error) throw error;
     alert('Product deleted successfully!');
     loadProducts();
   } catch (error) {
