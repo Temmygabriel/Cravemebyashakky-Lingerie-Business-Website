@@ -6,9 +6,8 @@
 <title>Crave Me by Ashakky | Premium Lingerie & Intimates</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -145,10 +144,10 @@
 
 <section id="products">
   <div class="section-header">
-    <h2 class="section-title">Explore Our <em>Exquisite</em> Range</h2>
+    <h2 class="section-title">Our <em>Exclusive</em> Collection</h2>
   </div>
   <div class="filter-bar">
-    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn active" data-filter="all">All Products</button>
     <button class="filter-btn" data-filter="panties">Panties</button>
     <button class="filter-btn" data-filter="sleepwear">Sleepwear</button>
     <button class="filter-btn" data-filter="lingerie">Lingerie</button>
@@ -159,25 +158,25 @@
   </div>
 </section>
 
-<section id="reviews" style="background: var(--charcoal);">
+<section id="reviews">
   <div class="section-header">
     <h2 class="section-title">What Our <em>Customers</em> Say</h2>
   </div>
   <div class="reviews-grid">
     <div class="review-card">
-      <div class="review-stars">★★★★★</div>
-      <p class="review-text">"Amazing quality! The fabric is so soft and luxurious. I've ordered three times already and will definitely be back for more!"</p>
-      <div class="review-author">— Chioma A.</div>
+      <div class="review-stars">⭐⭐⭐⭐⭐</div>
+      <p class="review-text">"Absolutely love the quality! The lace panties are so comfortable and beautiful. Will definitely be ordering more!"</p>
+      <div class="review-author">— Amara T.</div>
     </div>
     <div class="review-card">
-      <div class="review-stars">★★★★★</div>
-      <p class="review-text">"Fast delivery and beautiful packaging. The lingerie fits perfectly and looks exactly like the pictures. Highly recommend!"</p>
-      <div class="review-author">— Blessing O.</div>
+      <div class="review-stars">⭐⭐⭐⭐⭐</div>
+      <p class="review-text">"The satin robe set exceeded my expectations. Luxurious material and perfect fit. Fast delivery too!"</p>
+      <div class="review-author">— Chioma N.</div>
     </div>
     <div class="review-card">
-      <div class="review-stars">★★★★★</div>
-      <p class="review-text">"Best lingerie store in Nigeria! The customer service is excellent and the products are top-notch quality."</p>
-      <div class="review-author">— Folake M.</div>
+      <div class="review-stars">⭐⭐⭐⭐⭐</div>
+      <p class="review-text">"Got the lingerie set for my wife and she absolutely loves it. Great customer service and beautiful packaging!"</p>
+      <div class="review-author">— David O.</div>
     </div>
   </div>
 </section>
@@ -190,34 +189,34 @@
     <div class="step-card">
       <div class="step-number">1</div>
       <h3 class="step-title">Browse Collection</h3>
-      <p class="step-desc">Explore our exquisite range of premium lingerie and intimates</p>
+      <p class="step-desc">Explore our premium selection of lingerie, sleepwear, and intimates.</p>
     </div>
     <div class="step-card">
       <div class="step-number">2</div>
       <h3 class="step-title">Select Your Item</h3>
-      <p class="step-desc">Choose your favorite piece and click "Order on WhatsApp"</p>
+      <p class="step-desc">Choose your favorite product, pick your size, and click "Order on WhatsApp".</p>
     </div>
     <div class="step-card">
       <div class="step-number">3</div>
       <h3 class="step-title">Fill Details</h3>
-      <p class="step-desc">Enter your name, size, and delivery address</p>
+      <p class="step-desc">Enter your name, phone number, and delivery address in the order form.</p>
     </div>
     <div class="step-card">
       <div class="step-number">4</div>
       <h3 class="step-title">Complete Order</h3>
-      <p class="step-desc">Send your order via WhatsApp and we'll confirm instantly!</p>
+      <p class="step-desc">Send your order via WhatsApp and we'll confirm your purchase instantly!</p>
     </div>
   </div>
 </section>
 
 <footer>
   <div class="footer-brand">Crave Me by Ashakky</div>
-  <p style="color:#666; font-size: 0.85rem; margin-bottom: 20px;">Premium Lingerie & Intimates</p>
   <div class="footer-socials">
     <a href="https://wa.me/2348100778348" class="social-link" target="_blank">WhatsApp</a>
-    <a href="https://instagram.com/cravemebyashakky" class="social-link" target="_blank">Instagram</a>
+    <a href="#" class="social-link">Instagram</a>
+    <a href="#" class="social-link">Facebook</a>
   </div>
-  <p style="color:#555; font-size: 0.75rem;">© 2026 Crave Me by Ashakky. All rights reserved.</p>
+  <p style="color:#666; font-size:0.85rem;">© 2026 Crave Me by Ashakky. All rights reserved.</p>
 </footer>
 
 <!-- ORDER MODAL -->
@@ -227,16 +226,16 @@
     <h2 class="modal-title">Complete Your Order</h2>
     <form id="orderForm">
       <div class="form-group">
+        <label class="form-label">Select Size</label>
+        <div class="size-selector" id="sizeSelector"></div>
+      </div>
+      <div class="form-group">
         <label class="form-label">Your Name</label>
         <input type="text" class="form-input" id="customerName" required>
       </div>
       <div class="form-group">
-        <label class="form-label">WhatsApp Number</label>
+        <label class="form-label">Phone Number</label>
         <input type="tel" class="form-input" id="customerPhone" required>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Select Size</label>
-        <div class="size-selector" id="sizeSelector"></div>
       </div>
       <div class="form-group">
         <label class="form-label">Delivery Address</label>
@@ -248,28 +247,28 @@
 </div>
 
 <script>
-// 🔥 FIREBASE CONFIG - REPLACE WITH YOUR OWN
-const firebaseConfig = {
-  apiKey: "AIzaSyAnjyraktg2EeXnZQFznHhoZ_kb_LJ0WEc",
-  authDomain: "cravemebyashkky.firebaseapp.com",
-  projectId: "cravemebyashkky",
-  storageBucket: "cravemebyashkky.firebasestorage.app",
-  messagingSenderId: "558597438204",
-  appId: "1:558597438204:web:423c80c349ae35547ab579"
-};
+// 🔥 SUPABASE CONFIG
+const SUPABASE_URL = 'https://siguwlaudsssmcjxwong.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_OWShfzcHQhYWW7cHxE0h2Q_hzZ9jLz9';
 
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+// Initialize Supabase
+const { createClient } = supabase;
+const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 let allProducts = [];
 let currentProduct = null;
 
-// Load products from Firebase
+// Load products from Supabase
 async function loadProducts() {
   try {
-    const snapshot = await db.collection('products').orderBy('id').get();
-    allProducts = snapshot.docs.map(doc => ({id: doc.id, ...doc.data()}));
+    const { data, error } = await supabaseClient
+      .from('products')
+      .select('*')
+      .order('id', { ascending: true });
+    
+    if (error) throw error;
+    
+    allProducts = data || [];
     renderProducts('all');
   } catch (error) {
     console.error('Error loading products:', error);
@@ -291,7 +290,7 @@ function renderProducts(filter) {
       <div class="product-image-wrap">
         <img class="product-img" src="${p.img}" alt="${p.name}" loading="lazy">
         <div class="product-actions">
-          <button class="btn-order" onclick="openModal('${p.id}')">💬 Order on WhatsApp</button>
+          <button class="btn-order" onclick="openModal(${p.id})">💬 Order on WhatsApp</button>
         </div>
       </div>
       <div class="product-info">
