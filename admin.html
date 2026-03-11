@@ -217,7 +217,10 @@ body { font-family: 'Montserrat', sans-serif; background: var(--black); color: v
     <div class="tab-panel active" id="productsPanel">
       <div class="panel-header">
         <div class="panel-title">Manage Products <span id="productCount">0 products</span></div>
-        <button class="btn-add-product" onclick="addProduct()">+ Add New Product</button>
+        <div style="display: flex; gap: 10px;">
+          <button class="btn-add-product" onclick="resetProductsFromInitial()" style="background: #666; font-size: 0.7rem; padding: 8px 16px;">↻ Reset to Initial</button>
+          <button class="btn-add-product" onclick="addProduct()">+ Add New Product</button>
+        </div>
       </div>
       <div class="products-list" id="productsList"></div>
     </div>
@@ -373,21 +376,10 @@ function loadProducts() {
   if (saved) {
     PRODUCTS = JSON.parse(saved);
   } else {
-    // Default starter products
-    PRODUCTS = [
-      {
-        id: 1,
-        name: 'Satin Dreams Pajama Set',
-        category: 'sleepwear',
-        price: '₦12,000',
-        oldPrice: '',
-        desc: 'Luxurious satin button-up pajama set for ultimate comfort',
-        img: 'https://raw.githubusercontent.com/Temmygabriel/Cravemebyashakky-Lingerie-Business-Website/main/Images/WhatsApp%20Image%202026-03-09%20at%206.07.19%20PM.jpeg',
-        sizes: ['S', 'M', 'L', 'XL'],
-        colors: ['#E8C8D8', '#C9A8D8'],
-        badge: 'new'
-      }
-    ];
+    // Use the complete initial products inventory
+    PRODUCTS = INITIAL_PRODUCTS;
+    // Save to localStorage so edits persist
+    localStorage.setItem('products', JSON.stringify(PRODUCTS));
   }
   renderProductsList();
 }
@@ -503,6 +495,16 @@ function deleteProduct(id) {
     PRODUCTS = PRODUCTS.filter(p => p.id !== id);
     renderProductsList();
     showToast('Product deleted. Remember to save!');
+  }
+}
+
+// ── RESET TO INITIAL PRODUCTS ──
+function resetProductsFromInitial() {
+  if (confirm('This will reset all products to the initial inventory (41 products). Any custom products you added will be lost. Continue?')) {
+    PRODUCTS = JSON.parse(JSON.stringify(INITIAL_PRODUCTS)); // Deep copy
+    localStorage.setItem('products', JSON.stringify(PRODUCTS));
+    renderProductsList();
+    showToast('✓ Products reset to initial inventory (41 products)');
   }
 }
 
