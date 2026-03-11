@@ -68,6 +68,21 @@
   .product-name { font-family: 'Playfair Display', serif; font-size: 1rem; color: #fff; font-weight: 600; margin-bottom: 7px; }
   .product-price { font-family: 'Playfair Display', serif; font-size: 1.25rem; color: var(--gold); font-weight: 700; }
 
+  /* REVIEWS */
+  .reviews-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; max-width: 1200px; margin: 0 auto; }
+  .review-card { background: var(--black); border: 1px solid rgba(201,168,76,0.2); border-radius: 8px; padding: 28px; }
+  .review-stars { color: var(--gold); font-size: 1.1rem; margin-bottom: 12px; }
+  .review-text { color: #ccc; font-size: 0.95rem; line-height: 1.6; margin-bottom: 18px; font-style: italic; }
+  .review-author { color: var(--gold); font-weight: 600; font-size: 0.9rem; }
+
+  /* HOW TO ORDER */
+  .how-to-order { background: var(--black); }
+  .steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 32px; max-width: 1000px; margin: 0 auto; }
+  .step-card { text-align: center; }
+  .step-number { width: 60px; height: 60px; border-radius: 50%; background: var(--gold); color: var(--black); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: 700; margin: 0 auto 20px; }
+  .step-title { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: #fff; margin-bottom: 12px; }
+  .step-desc { color: #999; font-size: 0.9rem; line-height: 1.6; }
+
   /* MODAL */
   .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
   .modal.active { display: flex; }
@@ -111,6 +126,7 @@
     <li><a href="#home">Home</a></li>
     <li><a href="#products">Shop</a></li>
     <li><a href="#reviews">Reviews</a></li>
+    <li><a href="#how-to-order">How to Order</a></li>
   </ul>
   <a href="https://wa.me/2348100778348" class="nav-whatsapp" target="_blank">ORDER ON WHATSAPP</a>
   <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
@@ -147,24 +163,64 @@
   <div class="section-header">
     <h2 class="section-title">What Our <em>Customers</em> Say</h2>
   </div>
-  <div style="max-width: 800px; margin: 0 auto; color: #888; text-align: center;">
-    <p>"Amazing quality and fast delivery! Absolutely love my purchase!" - Sarah M.</p>
-    <p style="margin-top: 20px;">"Best lingerie store! Beautiful designs and great customer service." - Amaka O.</p>
+  <div class="reviews-grid">
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">"Amazing quality! The fabric is so soft and luxurious. I've ordered three times already and will definitely be back for more!"</p>
+      <div class="review-author">— Chioma A.</div>
+    </div>
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">"Fast delivery and beautiful packaging. The lingerie fits perfectly and looks exactly like the pictures. Highly recommend!"</p>
+      <div class="review-author">— Blessing O.</div>
+    </div>
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">"Best lingerie store in Nigeria! The customer service is excellent and the products are top-notch quality."</p>
+      <div class="review-author">— Folake M.</div>
+    </div>
+  </div>
+</section>
+
+<section id="how-to-order" class="how-to-order">
+  <div class="section-header">
+    <h2 class="section-title">How to <em>Order</em></h2>
+  </div>
+  <div class="steps-grid">
+    <div class="step-card">
+      <div class="step-number">1</div>
+      <h3 class="step-title">Browse Collection</h3>
+      <p class="step-desc">Explore our exquisite range of premium lingerie and intimates</p>
+    </div>
+    <div class="step-card">
+      <div class="step-number">2</div>
+      <h3 class="step-title">Select Your Item</h3>
+      <p class="step-desc">Choose your favorite piece and click "Order on WhatsApp"</p>
+    </div>
+    <div class="step-card">
+      <div class="step-number">3</div>
+      <h3 class="step-title">Fill Details</h3>
+      <p class="step-desc">Enter your name, size, and delivery address</p>
+    </div>
+    <div class="step-card">
+      <div class="step-number">4</div>
+      <h3 class="step-title">Complete Order</h3>
+      <p class="step-desc">Send your order via WhatsApp and we'll confirm instantly!</p>
+    </div>
   </div>
 </section>
 
 <footer>
   <div class="footer-brand">Crave Me by Ashakky</div>
+  <p style="color:#666; font-size: 0.85rem; margin-bottom: 20px;">Premium Lingerie & Intimates</p>
   <div class="footer-socials">
-    <a href="https://wa.me/2348100778348
-" class="social-link" target="_blank">📱 WhatsApp</a>
-    <a href="https://www.tiktok.com/@cravemebyashakky" class="social-link" target="_blank">🎵 TikTok</a>
-    <a href="https://instagram.com/cravemebyashakky" class="social-link" target="_blank">📷 Instagram</a>
+    <a href="https://wa.me/2348100778348" class="social-link" target="_blank">WhatsApp</a>
+    <a href="https://instagram.com/cravemebyashakky" class="social-link" target="_blank">Instagram</a>
   </div>
-  <div style="color: #555; font-size: 0.7rem;">&copy; 2026 Crave Me by Ashakky. All rights reserved.</div>
+  <p style="color:#555; font-size: 0.75rem;">© 2026 Crave Me by Ashakky. All rights reserved.</p>
 </footer>
 
-<!-- Order Modal -->
+<!-- ORDER MODAL -->
 <div class="modal" id="orderModal">
   <div class="modal-content">
     <button class="modal-close" onclick="closeModal()">&times;</button>
@@ -224,6 +280,11 @@ async function loadProducts() {
 function renderProducts(filter) {
   const grid = document.getElementById('productsGrid');
   const list = filter === 'all' ? allProducts : allProducts.filter(p => p.category === filter);
+  
+  if (list.length === 0) {
+    grid.innerHTML = '<p style="text-align:center; color:#888;">No products available in this category.</p>';
+    return;
+  }
   
   grid.innerHTML = list.map(p => `
     <div class="product-card">
